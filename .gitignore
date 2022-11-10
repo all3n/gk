@@ -1,0 +1,8 @@
+/out
+url.json
+/data
+*.log
+/test
+/bak
+/venv
+*.pyc
