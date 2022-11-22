@@ -1,4 +1,5 @@
 import os
+import sys
 from reportlab.lib.styles import ParagraphStyle as PS
 from reportlab.platypus import PageBreak
 from reportlab.platypus.paragraph import Paragraph
@@ -67,9 +68,6 @@ leading = 16, fontName = 'msyh')
 
 
 
-
-
-import sys
 toc = sys.argv[1]
 title = sys.argv[2]
 output = sys.argv[3]

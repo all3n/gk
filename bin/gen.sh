@@ -20,10 +20,7 @@ gen(){
   python -m app.mall $TOC_OUTPUT $MERGE_PDF $FINAL_PDF
 }
 
-
-#bash $APP_DIR/bin/copy.sh
-#bash $APP_DIR/bin/remove_duplicate.sh
-
+python -m app.split $APP_DIR/data $XKS
 
 for i in $(ls $XKS);do
   TITLE=$(cat $XKS/$i/file.txt|jq -r .name)

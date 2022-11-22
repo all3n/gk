@@ -64,7 +64,7 @@ def merge(input_dir, output, tmp_dir):
     pfm = PdfMerger()
     start = 0
     outline = []
-    jf = os.path.join(input_dir, "file.txt")
+    jf = os.path.join(input_dir, "file.json")
     if os.path.exists(jf):
         with open(jf, "r") as f:
             info = json.loads(f.read())
@@ -92,6 +92,9 @@ def merge(input_dir, output, tmp_dir):
             pfm.write(of)
 
 
+"""
+merge pdf and add page number and info
+"""
 def main():
     input_dir=sys.argv[1]
     output = sys.argv[2]

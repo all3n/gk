@@ -1,7 +1,6 @@
 import os
 import sys
 from collections import defaultdict
-from functools import cmp_to_key
 import json
 import copy
 import shutil
@@ -57,7 +56,6 @@ for i in x:
     sub_dir = os.path.join(input_dir, i)
     if os.path.isdir(sub_dir):
         xkn = {}
-        #print(sub_dir)
         sub_x = sorted(os.listdir(sub_dir), key = key_func, reverse=False)
         if len(sub_x) > 0:
             for si in sub_x:
@@ -78,11 +76,6 @@ for i in x:
 
 
 for k, v in skf.items():
-    #print(k, len(v), skf[k])
-    print('-=----------------------------------------')
-    print( k, len(v))
-    print('-=----------------------------------------')
-
     for idx in range(len(v)):
         xk_id = "%s_%d" % (k, idx)
         xk_id_dir = os.path.join(output_dir, xk_id)
@@ -96,17 +89,5 @@ for k, v in skf.items():
             if_path = os.path.join(input_dir, d, f)
             of_path = os.path.join(xk_id_dir, fname)
             shutil.copy(if_path, of_path)
-        with open(os.path.join(xk_id_dir, "file.txt"), "w") as f:
+        with open(os.path.join(xk_id_dir, "file.json"), "w") as f:
             f.write(json.dumps({"files": names, "name": name_map[k], "index": idx + 1}))
-
-
-
-    
-    
-
-
-
-
-
-    #for i in v:
-    #    print("..", i)
