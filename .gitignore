@@ -6,3 +6,4 @@ url.json
 /bak
 /venv
 *.pyc
+/tmp

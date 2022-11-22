@@ -8,6 +8,7 @@ from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
 from tqdm import tqdm
 import sys
+import json
 
 
 
@@ -47,8 +48,9 @@ def add_page_numgers(pdf_path, newpath, start = 0, title = ""):
 def create_page_pdf(num, tmp, start = 0, title = ""):
     title = title.replace(".pdf", "").replace('"','')
     '''create tmp pdf that only include page number'''
+    fonts_dir = os.environ["FONTS_DIR"]
     pdfmetrics.registerFont(
-        TTFont('msyh', './microsoft-ya-hei.ttf'))
+        TTFont('msyh', os.path.join(fonts_dir, 'microsoft-ya-hei.ttf')))
     c = canvas.Canvas(tmp)
     for i in range(num):
         c.setFont('msyh', 10)
@@ -58,14 +60,21 @@ def create_page_pdf(num, tmp, start = 0, title = ""):
     c.save()
 
 
-def merge(i):
-    tmp_dir = "tmp"
+def merge(input_dir, output, tmp_dir):
     pfm = PdfMerger()
     start = 0
     outline = []
-    if os.path.isdir(i):
-        for f in tqdm(sorted(os.listdir(i)), desc = i):
-            tf = os.path.join(i, f)
+    jf = os.path.join(input_dir, "file.txt")
+    if os.path.exists(jf):
+        with open(jf, "r") as f:
+            info = json.loads(f.read())
+            input_files = info["files"]
+    else:
+            input_files = sorted(os.listdir(input_dir))
+    if os.path.isdir(input_dir):
+        name=os.path.basename(input_dir)
+        for f in tqdm(input_files, desc = name):
+            tf = os.path.join(input_dir, f)
             try:
                 t_out = os.path.join(tmp_dir, f)
                 outline.append((f, start + 1))
@@ -76,18 +85,17 @@ def merge(i):
                 os.remove(t_out)
             except PyPDF2.errors.PdfReadError as e:
                 print(e, tf)
-    
-        with open('merge_%s.pdf' % (i), 'wb') as of:
+
+        with open(output, 'wb') as of:
             for (title, p) in outline:
                 pfm.add_outline_item(title, p)
             pfm.write(of)
 
 
 def main():
-    for i in tqdm(os.listdir(".")):
-        merge(i)
-#main()
-#merge('hx')
-#for i in sorted(os.listdir('hx')):
-#    print(i)
-merge(sys.argv[1])
+    input_dir=sys.argv[1]
+    output = sys.argv[2]
+    tmp_dir = sys.argv[3]
+    merge(input_dir, output, tmp_dir)
+
+main()
